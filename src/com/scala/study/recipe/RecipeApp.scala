@@ -12,6 +12,7 @@ object RecipeApp extends App {
     def findFoodByName(name: String) = {
       allFoods.find(p => p.name == name)
     }
+    case class FoodCategory(name: String, foods: List[Food])
   }
   object SimpleBrowser {
     def recipesUsing(food: Food) = {
