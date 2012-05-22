@@ -6,17 +6,18 @@ object RecipeApp extends App {
   object Cream extends Food("Cream")
   object Suger extends Food("Suger")
   object FruitSalad extends Recipe("fruit salad", "vegetable", List(Apple, Orange, Cream, Suger))
-  object SimpleDatabase {
-    def allFoods = List(Apple, Orange, Cream, Suger)
-    def allRecipes = List(FruitSalad)
-    def findFoodByName(name: String) = {
-      allFoods.find(p => p.name == name)
-    }
-    case class FoodCategory(name: String, foods: List[Food])
+  trait SimpleFood {
+    object Pear extends Food("Pear")
+    def allFoods = List(Apple, Pear)
+    def allCategories = Nil
   }
-  object SimpleBrowser {
-    def recipesUsing(food: Food) = {
-      SimpleDatabase.allRecipes.filter(recipe => recipe.ingredients.contains(food))
-    }
+  trait SimpleRecipes {
+    this: SimpleFood =>
+    object SimpleFruitSalad extends Recipe("simple fruit salad", "vegetable", List(Apple, Pear))
+    def allRecipes = List(SimpleFruitSalad)
+  }
+  object SimpleDatabase extends Database with SimpleFood with SimpleRecipes
+  object SimpleBrowser extends Browser {
+    val database = SimpleDatabase
   }
 }
